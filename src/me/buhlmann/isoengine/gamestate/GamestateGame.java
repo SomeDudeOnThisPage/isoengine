@@ -23,7 +23,7 @@ public class GamestateGame extends Gamestate
   {
     player = Player.add("game_default");
 
-    map = new TileMap(20);
+    map = new TileMap(50);
     renderer = new TileMapRenderer(map);
   }
 

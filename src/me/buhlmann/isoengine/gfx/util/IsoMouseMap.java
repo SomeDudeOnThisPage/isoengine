@@ -16,16 +16,27 @@ public class IsoMouseMap
 
   public Vector3i checkWhite(float x, float y, float tex, int tileHeight)
   {
-    int offset_x = (int) Math.rint(x * mm_scale + mm_scale / 2.0f) + (int) (tex * 64 * 16);
-    int offset_y = (int) Math.rint(y * mm_scale + mm_scale / 2.0f) + tileHeight * (mm_scale / 8);
+    // TODO: Actually find out why this is fuck. Simply catching an error and returning a white color is retarded...
 
-    if (offset_x >= 0 && offset_y >= 0)
+    try
     {
-      Color c = new Color(mousemap.getRGB(offset_x, offset_y));
-      return new Vector3i(c.getRed(), c.getGreen(), c.getBlue());
-    }
 
-    return new Vector3i(255, 255, 255);
+      int offset_x = (int) Math.rint(x * mm_scale + mm_scale / 2.0f) + (int) (tex * 64 * 16);
+      int offset_y = (int) Math.rint(y * mm_scale + mm_scale / 2.0f) + tileHeight * (mm_scale / 8);
+
+      if (offset_x >= 0 && offset_y >= 0)
+      {
+        Color c = new Color(mousemap.getRGB(offset_x, offset_y));
+        return new Vector3i(c.getRed(), c.getGreen(), c.getBlue());
+      }
+
+      return new Vector3i(255, 255, 255);
+
+    }
+    catch(Exception ignored)
+    {
+      return new Vector3i(255, 255, 255);
+    }
   }
 
   public IsoMouseMap(String file)
