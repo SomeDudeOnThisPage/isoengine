@@ -3,20 +3,19 @@ package me.buhlmann.isoengine.gfx.render;
 import me.buhlmann.isoengine.IsoEngine;
 import me.buhlmann.isoengine.gfx.Camera2D;
 import me.buhlmann.isoengine.gfx.shader.Shader;
-import me.buhlmann.isoengine.gfx.texture.Tileset;
+import me.buhlmann.isoengine.gfx.texture.TextureAtlas;
 import me.buhlmann.isoengine.gfx.util.IsoMouseMap;
 import me.buhlmann.isoengine.input.Input;
 import me.buhlmann.isoengine.level.TileChunk;
 import me.buhlmann.isoengine.level.TileMap;
 import me.buhlmann.isoengine.level.generation.TileChunkGenerator;
 import org.joml.Vector2f;
-import org.joml.Vector2i;
 import org.joml.Vector3i;
 
 public class TileMapRenderer extends InstancedRenderer
 {
   private Shader tileShader;
-  private Tileset tileset;
+  private TextureAtlas textureAtlas;
   private TileMap map;
   private boolean first = true;
   private IsoMouseMap mouseMap = new IsoMouseMap("tileset0_mm");
@@ -55,7 +54,7 @@ public class TileMapRenderer extends InstancedRenderer
     if (sx >= 0 && sy >= 0 && sx < map.getSize() && sy < map.getSize())
     {
       Vector2f screen = localToScreen(sx, sy, w, h, ox, oy, scale);
-      float textureCoordinates = tileset.getTextureCoordinates(map.getTile(sy, sx).getTexture()).x;
+      float textureCoordinates = textureAtlas.getTextureCoordinates(map.getTile(sy, sx).getTexture()).x;
       int tileHeight = map.getTile(sy, sx).getHeight();
       Vector3i rgb = mouseMap.checkWhite(((mouse.x - screen.x) / scale / 2), ((mouse.y - screen.y) / scale / 2), textureCoordinates, tileHeight);
 
@@ -96,7 +95,7 @@ public class TileMapRenderer extends InstancedRenderer
           }
         }
 
-        textureCoordinates = tileset.getTextureCoordinates(map.getTile(sy, sx).getTexture()).x;
+        textureCoordinates = textureAtlas.getTextureCoordinates(map.getTile(sy, sx).getTexture()).x;
         screen = localToScreen(sx, sy, w, h, ox, oy, scale);
         tileHeight = map.getTile(sy, sx).getHeight();
 
@@ -136,14 +135,14 @@ public class TileMapRenderer extends InstancedRenderer
         // No editing of terrain possible right now so no need to regenerate
         if (first)
         {
-          TileChunkGenerator.generate(map, camera, tileShader, tileset, chunk);
+          TileChunkGenerator.generate(map, camera, tileShader, textureAtlas, chunk);
         }
 
         if (pos.x + pos.y / 2 > 0 - TileChunk.SIZE * scale - w && pos.x + pos.y / 2 < w * 2 + TileChunk.SIZE * scale + w)
         {
           if (pos.y > 0 - TileChunk.SIZE * scale && pos.y < h * 2 + TileChunk.SIZE * scale)
           {
-            TileChunkGenerator.prepare(camera, tileShader, tileset);
+            TileChunkGenerator.prepare(camera, tileShader, textureAtlas);
             setMouseUniform(camera, chunk);
             chunk.render();
           }
@@ -161,7 +160,7 @@ public class TileMapRenderer extends InstancedRenderer
   {
     super();
     tileShader = new Shader("static");
-    tileset = new Tileset("tileset0", 16, 16);
+    textureAtlas = new TextureAtlas("tileset0", 16, 16);
     this.map = map;
   }
 }

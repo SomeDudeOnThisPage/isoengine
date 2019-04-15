@@ -38,6 +38,10 @@ public class IRVertexArray
   private int tapID;
   private int indID;
 
+  private int size;
+
+  private FloatBuffer buffer;
+
   public int getTextureAtlasPositionVBO()
   {
     return tapID;
@@ -46,6 +50,32 @@ public class IRVertexArray
   public int getModelViewMatrixVBO()
   {
     return mvmID;
+  }
+
+  public void update(float[] vertexData, float[] texturePositions)
+  {
+    //count = vertexData.length / 3;
+
+    // Repopulate the buffer with our new vertex data
+    buffer.put(vertexData);
+    buffer.flip();
+
+    // Bind the vertex vbo and populate it with sub-data
+    glBindBuffer(GL_ARRAY_BUFFER, getModelViewMatrixVBO());
+    glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
+
+    // Repopulate buffer with texture atlas position data
+    buffer.clear();
+    buffer.put(texturePositions);
+    buffer.flip();
+
+    // Bind the vertex vbo and populate it with sub-data
+    glBindBuffer(GL_ARRAY_BUFFER, getTextureAtlasPositionVBO());
+    glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
+
+    // Cleanup
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    buffer.clear();
   }
 
   public void bind()
@@ -62,6 +92,9 @@ public class IRVertexArray
 
   public IRVertexArray(int max)
   {
+    size = max;
+    buffer = BufferUtils.createFloatBuffer(size);
+
     vaoID = glGenVertexArrays();
     glBindVertexArray(vaoID);
 

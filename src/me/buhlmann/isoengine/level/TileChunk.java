@@ -17,10 +17,7 @@ public class TileChunk
 
   private Tile[][] tiles;
 
-  public int count = 0;
-
   private IRVertexArray vao;
-  private FloatBuffer buffer = BufferUtils.createFloatBuffer(SIZE * SIZE * 3);
 
   public Vector2i getPosition()
   {
@@ -39,28 +36,7 @@ public class TileChunk
 
   public void update(float[] vertexData, float[] texturePositions)
   {
-    count = vertexData.length / 3;
-
-    // Repopulate the buffer with our new vertex data
-    buffer.put(vertexData);
-    buffer.flip();
-
-    // Bind the vertex vbo and populate it with sub-data
-    glBindBuffer(GL_ARRAY_BUFFER, vao.getModelViewMatrixVBO());
-    glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
-
-    // Repopulate buffer with texture atlas position data
-    buffer.clear();
-    buffer.put(texturePositions);
-    buffer.flip();
-
-    // Bind the vertex vbo and populate it with sub-data
-    glBindBuffer(GL_ARRAY_BUFFER, vao.getTextureAtlasPositionVBO());
-    glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
-
-    // Cleanup
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    buffer.clear();
+    vao.update(vertexData, texturePositions);
   }
 
   public void render()
@@ -72,7 +48,7 @@ public class TileChunk
 
   public TileChunk(int px, int py)
   {
-    vao = new IRVertexArray(Short.MAX_VALUE / 3);
+    vao = new IRVertexArray(SIZE * SIZE * 3);
     tiles = new Tile[SIZE][SIZE];
 
     position = new Vector2i(px, py);

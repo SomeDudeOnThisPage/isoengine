@@ -33,13 +33,18 @@ public class Texture {
 
   public Texture(String name)
   {
+    this("resources/textures/" + name + ".png", false);
+  }
+
+  public Texture(String name, boolean fOverride)
+  {
     try
     {
       IntBuffer width = BufferUtils.createIntBuffer(1);
       IntBuffer height = BufferUtils.createIntBuffer(1);
       IntBuffer components = BufferUtils.createIntBuffer(1);
 
-      ByteBuffer data = STBImage.stbi_load_from_memory(GFXUtil.ioLoadResource("resources/textures/" + name + ".png"), width, height, components, 4);
+      ByteBuffer data = STBImage.stbi_load_from_memory(GFXUtil.ioLoadResource(name), width, height, components, 4);
 
       ID = glGenTextures();
       glBindTexture(GL_TEXTURE_2D, ID);
@@ -56,7 +61,7 @@ public class Texture {
     }
     catch (IOException e)
     {
-      System.err.println("Could not load texture: resources/textures/" + name + ".png");
+      System.err.println("Could not load texture " + name + ": " + e + " " + e.getMessage());
     }
   }
 }

@@ -2,7 +2,7 @@ package me.buhlmann.isoengine.level.generation;
 
 import me.buhlmann.isoengine.gfx.Camera2D;
 import me.buhlmann.isoengine.gfx.shader.Shader;
-import me.buhlmann.isoengine.gfx.texture.Tileset;
+import me.buhlmann.isoengine.gfx.texture.TextureAtlas;
 import me.buhlmann.isoengine.level.TileChunk;
 import me.buhlmann.isoengine.level.TileMap;
 import org.joml.Matrix4f;
@@ -17,35 +17,6 @@ public class TileChunkGenerator
 
   private static int r_pos_vertices = 0;
   private static int r_pos_textures = 0;
-
-  public static void prepare(Camera2D camera, Shader tileShader, Tileset tileset)
-  {
-    vertexData = new float[TileChunk.SIZE * TileChunk.SIZE * 3];
-    textureData = new float[TileChunk.SIZE * TileChunk.SIZE * 2];
-
-    r_pos_vertices = 0;
-    r_pos_textures = 0;
-
-    Matrix4f cam = new Matrix4f().translate(new Vector3f(camera.getPosition().x, camera.getPosition().y, 0.0f));
-
-    tileShader.setUniform("mouse_position", -1);
-    tileShader.setUniform("cam_pos", cam);
-    tileShader.setUniform("scale", camera.getScale());
-    tileShader.setUniform("atlas_size", tileset.getRows());
-    tileShader.setUniform("pr_matrix", camera.project());
-
-    tileShader.bind();
-    tileset.bind();
-  }
-
-  private static void fillVertical(int x, int y, int start, int finish, float scale, Vector2f tLoc)
-  {
-    for (int i = start; i < finish; i++)
-    {
-      updateVertexData(-(x - y) * scale, -(x + y) * 0.5f * scale + i * scale / 2.65f, 1.0f);
-      updateTextureData(tLoc.x, tLoc.y);
-    }
-  }
 
   private static void updateVertexData(float v1, float v2, float v3)
   {
@@ -64,9 +35,38 @@ public class TileChunkGenerator
     r_pos_textures += 2;
   }
 
-  public static void generate(TileMap map, Camera2D camera, Shader tileShader, Tileset tileset, TileChunk chunk)
+  public static void prepare(Camera2D camera, Shader tileShader, TextureAtlas textureAtlas)
   {
-    prepare(camera, tileShader, tileset);
+    vertexData = new float[TileChunk.SIZE * TileChunk.SIZE * 3];
+    textureData = new float[TileChunk.SIZE * TileChunk.SIZE * 2];
+
+    r_pos_vertices = 0;
+    r_pos_textures = 0;
+
+    Matrix4f cam = new Matrix4f().translate(new Vector3f(camera.getPosition().x, camera.getPosition().y, 0.0f));
+
+    tileShader.setUniform("mouse_position", -1);
+    tileShader.setUniform("cam_pos", cam);
+    tileShader.setUniform("scale", camera.getScale());
+    tileShader.setUniform("atlas_size", textureAtlas.getRows());
+    tileShader.setUniform("pr_matrix", camera.project());
+
+    tileShader.bind();
+    textureAtlas.bind();
+  }
+
+  private static void fillVertical(int x, int y, int start, int finish, float scale, Vector2f tLoc)
+  {
+    for (int i = start; i < finish; i++)
+    {
+      updateVertexData(-(x - y) * scale, -(x + y) * 0.5f * scale + i * scale / 2.65f, 1.0f);
+      updateTextureData(tLoc.x, tLoc.y);
+    }
+  }
+
+  public static void generate(TileMap map, Camera2D camera, Shader tileShader, TextureAtlas textureAtlas, TileChunk chunk)
+  {
+    prepare(camera, tileShader, textureAtlas);
 
     Vector2i position = chunk.getPosition();
 
@@ -80,7 +80,7 @@ public class TileChunkGenerator
         int py = position.y * TileChunk.SIZE;
 
         // In order to determine what texture we need to use we need to check the heights of adjacent tiles and set the texture accordingly.
-        Vector2f tLoc = tileset.getTextureCoordinates(map.getTile(px + x, py + y).getTexture());
+        Vector2f tLoc = textureAtlas.getTextureCoordinates(map.getTile(px + x, py + y).getTexture());
         // Set the topmost tile to be rendered
         updateVertexData(-((x + px) - (y + py)), -((x + px) + (y + py)) * 0.5f + map.getTile(px + x, py + y).getDrawHeight() / 4.0f, 1.0f);
         updateTextureData(tLoc.x, tLoc.y);

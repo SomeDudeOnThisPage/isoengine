@@ -1,13 +1,16 @@
 package me.buhlmann.isoengine.ui;
 
+import me.buhlmann.isoengine.gfx.Camera2D;
+import me.buhlmann.isoengine.gfx.util.IRVertexArray;
+
 public abstract class GUIObject
 {
-  private static final float[] mesh = new float[]
+  private static final float[] vertices = new float[]
   {
-    -1.0f, -1.0f,     // Top
-    1.0f, -1.0f,      // Right Corner
-    1.0f,  1.0f,      // Bottom
-    -1.0f,  1.0f,     // Left Corner
+    -1.0f,  1.0f,     // Top
+    -1.0f, -1.0f,      // Right Corner
+     1.0f,  1.0f,      // Bottom
+     1.0f, -1.0f,     // Left Corner
   };
 
   private static int[] indices = new int[]
@@ -16,5 +19,17 @@ public abstract class GUIObject
     2, 3, 0
   };
 
-  public abstract void render();
+  protected IRVertexArray vao;
+
+  public abstract void render(Camera2D camera);
+
+  public static void initialize()
+  {
+
+  }
+
+  public GUIObject()
+  {
+    vao = new IRVertexArray(Short.MAX_VALUE);
+  }
 }

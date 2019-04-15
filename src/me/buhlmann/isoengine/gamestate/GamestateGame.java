@@ -23,7 +23,7 @@ public class GamestateGame extends Gamestate
   {
     player = Player.add("game_default");
 
-    map = new TileMap(50);
+    map = new TileMap(2);
     renderer = new TileMapRenderer(map);
   }
 
@@ -56,7 +56,6 @@ public class GamestateGame extends Gamestate
       if (System.currentTimeMillis() > next_rotate)
       {
         next_rotate = System.currentTimeMillis() + 250;
-        //map.rotate(false);
       }
     }
 
@@ -65,7 +64,6 @@ public class GamestateGame extends Gamestate
       if (System.currentTimeMillis() > next_rotate)
       {
         next_rotate = System.currentTimeMillis() + 250;
-        //map.rotate(true);
       }
     }
 
@@ -75,9 +73,9 @@ public class GamestateGame extends Gamestate
       Input.resetMouseScroll();
     }
 
-    if (Input.mouseScroll() < 0.0 && playerCamera.getScale() >= 3)
+    if (Input.mouseScroll() < 0.0 && playerCamera.getScale() > 4)
     {
-      playerCamera.modScale(-2);
+      playerCamera.modScale(-4);
       Input.resetMouseScroll();
     }
   }

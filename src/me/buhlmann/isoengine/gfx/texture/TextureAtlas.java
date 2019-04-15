@@ -2,7 +2,7 @@ package me.buhlmann.isoengine.gfx.texture;
 
 import org.joml.Vector2f;
 
-public class Tileset extends Texture
+public class TextureAtlas extends Texture
 {
   private int rows;
   private int columns;
@@ -17,7 +17,15 @@ public class Tileset extends Texture
     return new Vector2f(texture % rows / (float) rows, (float) Math.floor(texture / (float) columns) / columns);
   }
 
-  public Tileset(String name, int rows, int columns)
+  public TextureAtlas(String name, int rows, int columns, boolean fOverride)
+  {
+    super(name, fOverride);
+
+    this.rows = rows;
+    this.columns = columns;
+  }
+
+  public TextureAtlas(String name, int rows, int columns)
   {
     super(name);
 
