@@ -46,10 +46,14 @@ public class TileChunk
   public TileChunk(int px, int py)
   {
     vao = new InstancedRenderingVertexArray();
-    vao.addAttribute(0, 2, new float[] {-1.0f, -1.0f, 1.0f, -1.0f, 1.0f,  1.0f, -1.0f, 1.0f});
     vao.addIndices(new int[] {0, 1, 2, 2, 3, 0});
+    // Vertex Positions
+    vao.addAttribute(0, 2, new float[] {-1.0f, -1.0f, 1.0f, -1.0f, 1.0f,  1.0f, -1.0f, 1.0f});
+    // Texture Positions
     vao.addAttribute(1, 2, new float[] {0.0f,  1.0f, 1.0f,  1.0f, 1.0f,  0.0f, 0.0f,  0.0f});
+    // Instance World Positions
     vao.addInstancedAttribute(2, Short.MAX_VALUE, 3, 1);
+    // Instance Texture Positions
     vao.addInstancedAttribute(3, Short.MAX_VALUE, 2, 1);
 
     tiles = new Tile[SIZE][SIZE];

@@ -19,6 +19,7 @@ public class TileMapRenderer extends InstancedRenderer
   private TileMap map;
   private boolean first = true;
   private IsoMouseMap mouseMap = new IsoMouseMap("tileset0_mm");
+  private int lastChunks = 0;
 
   private Vector2f localToScreen(float localX, float localY, int w, int h, float ox, float oy, float scale)
   {
@@ -117,9 +118,16 @@ public class TileMapRenderer extends InstancedRenderer
     }
   }
 
+  public int getChunkAmount()
+  {
+    return lastChunks;
+  }
+
   @Override
   public void render(Camera2D camera)
   {
+    lastChunks = 0;
+
     int w = IsoEngine.getWindow().getWidth() / 2;
     int h = IsoEngine.getWindow().getHeight() / 2;
 
@@ -146,6 +154,7 @@ public class TileMapRenderer extends InstancedRenderer
             TileChunkGenerator.prepare(camera, tileShader, textureAtlas);
             setMouseUniform(camera, chunk);
             chunk.render();
+            lastChunks++;
           }
         }
       }

@@ -1,13 +1,11 @@
 package me.buhlmann.isoengine;
 
-import com.sun.management.OperatingSystemMXBean;
 import me.buhlmann.isoengine.gamestate.GamestateGame;
 import me.buhlmann.isoengine.gamestate.GamestateManager;
 import me.buhlmann.isoengine.gfx.util.Window;
 import me.buhlmann.isoengine.input.Input;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 
 public class IsoEngine
 {

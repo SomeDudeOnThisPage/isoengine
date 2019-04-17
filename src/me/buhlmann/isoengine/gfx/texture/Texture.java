@@ -35,8 +35,9 @@ public class Texture {
   {
     this("resources/textures/" + name + ".png", false);
   }
+  public Texture(String name, boolean fOverride) { this(name, GL_NEAREST, false); }
 
-  public Texture(String name, boolean fOverride)
+  public Texture(String name, int filter, boolean fOverride)
   {
     try
     {
@@ -50,8 +51,8 @@ public class Texture {
       ID = glGenTextures();
       glBindTexture(GL_TEXTURE_2D, ID);
 
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(), height.get(), 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 

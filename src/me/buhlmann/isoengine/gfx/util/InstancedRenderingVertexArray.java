@@ -12,8 +12,14 @@ public class InstancedRenderingVertexArray extends VertexArray
 {
   private int[] buffers;
 
+  private int AMOUNT;
+
+  public void setAmount(int amount)
+  {
+    AMOUNT = amount;
+  }
+
   private int COUNT = 6;
-  private int AMOUNT = 2;
   @Override
   public void render()
   {
@@ -37,7 +43,6 @@ public class InstancedRenderingVertexArray extends VertexArray
     if (attribute < MAX_ATTRIBUTES)
     {
       bind();
-      System.out.println(attribute + " " + buffers[attribute]);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[attribute]);
 
       FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);

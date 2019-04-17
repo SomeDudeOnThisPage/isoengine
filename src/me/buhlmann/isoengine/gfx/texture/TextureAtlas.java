@@ -17,6 +17,14 @@ public class TextureAtlas extends Texture
     return new Vector2f(texture % rows / (float) rows, (float) Math.floor(texture / (float) columns) / columns);
   }
 
+  public TextureAtlas(String name, int rows, int columns, int filter, boolean fOverride)
+  {
+    super(name, filter, fOverride);
+
+    this.rows = rows;
+    this.columns = columns;
+  }
+
   public TextureAtlas(String name, int rows, int columns, boolean fOverride)
   {
     super(name, fOverride);
