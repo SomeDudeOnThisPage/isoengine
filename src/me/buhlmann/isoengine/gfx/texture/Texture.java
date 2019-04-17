@@ -44,6 +44,7 @@ public class Texture {
       IntBuffer height = BufferUtils.createIntBuffer(1);
       IntBuffer components = BufferUtils.createIntBuffer(1);
 
+      // STB is a blessing
       ByteBuffer data = STBImage.stbi_load_from_memory(GFXUtil.ioLoadResource(name), width, height, components, 4);
 
       ID = glGenTextures();

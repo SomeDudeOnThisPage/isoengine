@@ -2,12 +2,13 @@ package me.buhlmann.isoengine.gamestate;
 
 import me.buhlmann.isoengine.gfx.Camera2D;
 import me.buhlmann.isoengine.gfx.render.TileMapRenderer;
+import me.buhlmann.isoengine.gfx.shader.Shader;
+import me.buhlmann.isoengine.gfx.util.InstancedRenderingVertexArray;
 import me.buhlmann.isoengine.input.Input;
 import me.buhlmann.isoengine.level.TileMap;
 import me.buhlmann.isoengine.player.Player;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 
 public class GamestateGame extends Gamestate
 {
@@ -18,11 +19,14 @@ public class GamestateGame extends Gamestate
 
   private Player player;
 
+  InstancedRenderingVertexArray va1 = new InstancedRenderingVertexArray();
+
+  private Shader tileShader;
+
   @Override
   public void initialize()
   {
     player = Player.add("game_default");
-
     map = new TileMap(2);
     renderer = new TileMapRenderer(map);
   }

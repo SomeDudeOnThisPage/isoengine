@@ -117,6 +117,7 @@ public class TileMapRenderer extends InstancedRenderer
     }
   }
 
+  @Override
   public void render(Camera2D camera)
   {
     int w = IsoEngine.getWindow().getWidth() / 2;

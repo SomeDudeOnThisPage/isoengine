@@ -3,11 +3,8 @@ package me.buhlmann.isoengine.level;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL31.*;
 
-import me.buhlmann.isoengine.gfx.util.IRVertexArray;
+import me.buhlmann.isoengine.gfx.util.InstancedRenderingVertexArray;
 import org.joml.Vector2i;
-import org.lwjgl.BufferUtils;
-
-import java.nio.FloatBuffer;
 
 public class TileChunk
 {
@@ -17,8 +14,7 @@ public class TileChunk
 
   private Tile[][] tiles;
 
-  private IRVertexArray vao;
-
+  private InstancedRenderingVertexArray vao;
   public Vector2i getPosition()
   {
     return position;
@@ -36,7 +32,8 @@ public class TileChunk
 
   public void update(float[] vertexData, float[] texturePositions)
   {
-    vao.update(vertexData, texturePositions);
+    vao.updateInstancedAttributeData(2, vertexData);
+    vao.updateInstancedAttributeData(3, texturePositions);
   }
 
   public void render()
@@ -48,7 +45,13 @@ public class TileChunk
 
   public TileChunk(int px, int py)
   {
-    vao = new IRVertexArray(SIZE * SIZE * 3);
+    vao = new InstancedRenderingVertexArray();
+    vao.addAttribute(0, 2, new float[] {-1.0f, -1.0f, 1.0f, -1.0f, 1.0f,  1.0f, -1.0f, 1.0f});
+    vao.addIndices(new int[] {0, 1, 2, 2, 3, 0});
+    vao.addAttribute(1, 2, new float[] {0.0f,  1.0f, 1.0f,  1.0f, 1.0f,  0.0f, 0.0f,  0.0f});
+    vao.addInstancedAttribute(2, Short.MAX_VALUE, 3, 1);
+    vao.addInstancedAttribute(3, Short.MAX_VALUE, 2, 1);
+
     tiles = new Tile[SIZE][SIZE];
 
     position = new Vector2i(px, py);
